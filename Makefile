@@ -18,4 +18,10 @@ help:
 test:
 	poetry run pytest
 
+package-install:
+	pipx install ./dist/*.whl
+
+package-uninstall:
+	pipx uninstall hexlet-code
+
 .PHONY: install test lint selfcheck check build help
