@@ -4,3 +4,6 @@
 ### Codeclimate Badges:
 [![Quality badge](https://api.codeclimate.com/v1/badges/91918b0578ba5a6deeab/maintainability)](https://codeclimate.com/github/Data-Wan/python-project-lvl3/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/91918b0578ba5a6deeab/test_coverage)](https://codeclimate.com/github/Data-Wan/python-project-lvl3/test_coverage)
+
+### Asciinema list
+[Basic page-loader demonstration](https://asciinema.org/a/DmuiWtaNS2iDkLoupRK6avzHL)
