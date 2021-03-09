@@ -2,6 +2,7 @@
 
 """Module with main function."""
 
+import os
 import re
 
 import requests
@@ -20,7 +21,7 @@ def download(url, path):
     filename = delete_scheme(url)
     filename = re.sub(r'\W', '-', filename)
     filename = '{0}.html'.format(filename)
-    file_path = '{0}/{1}'.format(path, filename)
+    file_path = os.path.join(path, filename)
     with open(file_path, 'w') as file:  # noqa: WPS110
         file.write(requests.get(url).text)
     return filename
