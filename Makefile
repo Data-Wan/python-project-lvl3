@@ -16,7 +16,7 @@ help:
 	poetry run gendiff --help
 
 test:
-	poetry run pytest
+	PYTHONPATH=. poetry run  pytest 
 
 package-install:
 	pipx install ./dist/*.whl

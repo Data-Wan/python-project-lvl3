@@ -3,12 +3,17 @@ name = "hexlet-code"
 version = "0.1.0"
 description = ""
 authors = ["Data-Wan <ustimenko.work@gmail.com>"]
+packages = [
+  { include = "page_loader" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.6"
 pytest = "^6.2.2"
 pytest-cov = "^2.11.1"
 PyYAML = "^5.4.1"
+requests = "^2.25.1"
+requests-mock = "^1.8.0"
 
 [tool.poetry.dev-dependencies]
 wemake-python-styleguide = "^0.14.1"
