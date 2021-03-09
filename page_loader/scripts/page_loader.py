@@ -9,7 +9,6 @@ args = take_args()
 
 def main():
     """Print generate diff for 2 json files."""
-
     print(download(args.url, args.path))
 
 

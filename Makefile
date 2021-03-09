@@ -2,7 +2,7 @@ install:
 	poetry install
 
 lint:
-	poetry run flake8 gendiff
+	poetry run flake8 page_loader
 
 selfcheck:
 	poetry check
@@ -13,7 +13,7 @@ build: check
 	poetry build
 
 help:
-	poetry run gendiff --help
+	poetry run page_loader --help
 
 test:
 	PYTHONPATH=. poetry run  pytest 
