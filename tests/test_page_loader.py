@@ -13,7 +13,8 @@ from bs4 import BeautifulSoup
 
                          [
                              ('https://ru.hexlet.io/courses', 'ru-hexlet-io-courses.html'),
-                             ('https://en.wikipedia.org/wiki/Lilith', 'en-wikipedia-org-wiki-Lilith.html')
+                             ('https://en.wikipedia.org/wiki/Lilith', 'en-wikipedia-org-wiki-Lilith.html'),
+                             ('https://hexletp3test.tiiny.site', 'hexletp3test-tiiny-site.html')
 
                          ])
 def test_output(url, right_name):
@@ -24,4 +25,4 @@ def test_output(url, right_name):
         with open(os.path.join(tempdir, name), 'r') as file:
             soup = BeautifulSoup(file.read(), 'html.parser')
             for imgtag in soup.findAll('img'):
-                assert imgtag['src'].startswith(tempdir)
+                assert imgtag.get('src').startswith(tempdir)

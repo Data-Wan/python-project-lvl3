@@ -5,7 +5,7 @@
 import os
 import re
 import shutil
-from urllib.parse import urlsplit
+from urllib.parse import urljoin, urlsplit
 
 import requests
 from bs4 import BeautifulSoup
@@ -29,53 +29,76 @@ def download(url, path):  # noqa: WPS210
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
+    dir_name = '{0}_files'.format(file_name[:-5])
+    all_files_path = os.path.join(path, dir_name)
+
     with open(file_path, 'w+', encoding='utf-8') as html_file:
-        webpage_to_str = str(soup)
-        html_file.write(webpage_to_str)
-        download_img(soup, path, file_name, url)
-        html_file.truncate(0)
+        os.mkdir(all_files_path)
+        download_img(soup, all_files_path, url)
+        download_local_res(soup, all_files_path, url)
         webpage_to_str = str(soup)
         html_file.write(webpage_to_str)
 
     return file_name
 
 
-def download_img(soup, path, html_name, url):  # noqa: WPS210
+def download_img(soup, all_files_path, url):  # noqa: WPS210
     """Download image from web page to specific path.
 
     Args:
         soup: str
-        path: str
-        html_name: str
+        all_files_path: str
         url: str
 
     """
-    dir_name = '{0}_files'.format(html_name[:-5])
-    all_imgs_path = os.path.join(path, dir_name)
-    os.mkdir(all_imgs_path)
-
     for imgtag in soup.findAll('img'):
-        source = imgtag['src']
+        source = imgtag.get('src')
+        if source:
+            image_url = urljoin(url, source)
 
-        if source.startswith('//'):
-            image_url = 'http:{0}'.format(delete_scheme(source))
-        else:
-            template_url = '{0.scheme}://{0.netloc}{1}'
-            image_url = template_url.format(urlsplit(url), source)
+            file_name = create_file_name(image_url)
+            file_path = os.path.join(all_files_path, file_name)
+            imgtag['src'] = file_path
+            response = requests.get(image_url, stream=True)
+            if response.status_code == 200:
+                # Set decode_content value to True
+                # otherwise the downloaded image file's size will be zero.
+                response.raw.decode_content = True
 
-        file_name = create_image_name(image_url)
-        file_path = os.path.join(all_imgs_path, file_name)
-        imgtag['src'] = file_path
-        response = requests.get(image_url, stream=True)
-        if response.status_code == 200:
-            # Set decode_content value to True
-            # otherwise the downloaded image file's size will be zero.
-            response.raw.decode_content = True
+            # Open a local file with wb ( write binary ) permission.
+            with open(file_path, 'wb') as file:  # noqa: WPS110
 
-        # Open a local file with wb ( write binary ) permission.
-        with open(file_path, 'wb') as file:  # noqa: WPS110
+                shutil.copyfileobj(response.raw, file)
 
-            shutil.copyfileobj(response.raw, file)
+
+def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231
+    """Download link and scripts from web page to specific path.
+
+    Args:
+        soup: str
+        all_files_path: str
+        url: str
+    """
+    for resource_tag in soup.findAll({'script': True, 'link': True}):
+        source_tags = {'script': 'src', 'link': 'href'}
+
+        source = resource_tag.get(source_tags.get(resource_tag.name))
+        if source:
+            if urlsplit(source).netloc:
+                if urlsplit(source).netloc != urlsplit(url).netloc:
+                    continue
+
+            resource_url = urljoin(url, source)
+            if urlsplit(resource_url).netloc == '':
+                continue
+            filename = create_file_name(resource_url)
+            file_path = os.path.join(all_files_path, filename)
+
+            resource_tag[source_tags.get(resource_tag.name)] = file_path
+
+            with open(file_path, 'wb') as file:  # noqa: WPS110
+
+                file.write(requests.get(resource_url).content)
 
 
 def create_html_name(url):
@@ -92,8 +115,8 @@ def create_html_name(url):
     return '{0}.html'.format(file_name)
 
 
-def create_image_name(url):
-    """Generate name for image file, base on url.
+def create_file_name(url):
+    """Generate name for resource file, base on url.
 
     Args:
         url: str
@@ -101,7 +124,10 @@ def create_image_name(url):
     Returns:
         Name for image file.
     """
-    return re.sub(r'\W(?!jpg|png|PNG|JPG)', '-', url)
+    file_name = re.sub(r'[^\d.A-Za-z]|\.(?=[^/]+/)', '-', url)
+    if len(file_name) > 40:
+        file_name = file_name[-30:]
+    return file_name
 
 
 def delete_scheme(url):
