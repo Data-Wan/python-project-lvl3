@@ -16,7 +16,7 @@ help:
 	poetry run page_loader --help
 
 test:
-	PYTHONPATH=. poetry run  pytest 
+	PYTHONPATH=. poetry run  pytest
 
 package-install:
 	pipx install ./dist/*.whl

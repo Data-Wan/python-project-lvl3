@@ -4,9 +4,14 @@
 import tempfile
 import pytest
 import os
+import logging
+import logging.config
 
 from page_loader.page_loader import download
 from bs4 import BeautifulSoup
+
+# create logger
+logger = logging.getLogger(__name__)
 
 
 @pytest.mark.parametrize("url, right_name",
@@ -18,6 +23,7 @@ from bs4 import BeautifulSoup
 
                          ])
 def test_output(url, right_name):
+    logging.info('!!!START!!!')
     with tempfile.TemporaryDirectory() as tempdir:
         name = download(url, tempdir)
         assert name == right_name
@@ -26,3 +32,5 @@ def test_output(url, right_name):
             soup = BeautifulSoup(file.read(), 'html.parser')
             for imgtag in soup.findAll('img'):
                 assert imgtag.get('src').startswith(tempdir)
+
+    logging.info('!!!FINISHED!!!')
