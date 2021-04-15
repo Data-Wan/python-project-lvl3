@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
                          [
                              ('https://ru.hexlet.io/courses', 'ru-hexlet-io-courses.html'),
                              ('https://en.wikipedia.org/wiki/Lilith', 'en-wikipedia-org-wiki-Lilith.html'),
-                             ('https://hexletp3test.tiiny.site', 'hexletp3test-tiiny-site.html')
+                             ('https://hexlettest.tiiny.site', 'hexlettest-tiiny-site.html')
 
                          ])
 def test_output(url, right_name):
