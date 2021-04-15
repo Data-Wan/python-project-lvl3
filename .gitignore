@@ -5,3 +5,4 @@ dist/
 .venv/
 .idea/
 pytest.log
+logs/
