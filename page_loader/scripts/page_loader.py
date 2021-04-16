@@ -16,7 +16,7 @@ def main():
     """Download webpage."""
     module_logger.info('start downloading webpage')
 
-    print(page_loader.download(args.url, args.path))
+    print(page_loader.download(args.url, args.output))
 
     module_logger.info('finished downloading')
 
