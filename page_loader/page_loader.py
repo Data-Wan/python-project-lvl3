@@ -166,6 +166,8 @@ def create_file_name(url):
     file_name = re.sub(r'[^\d.A-Za-z]|\.(?=[^/]+/)', '-', file_name)
     if len(file_name) > 40:
         file_name = file_name[-247:]
+    if os.path.splitext(file_name)[-1] == '':
+        return '{0}.html'.format(file_name)
     return file_name
 
 
