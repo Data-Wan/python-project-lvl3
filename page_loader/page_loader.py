@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 
 """Module with main function."""
-
+import logging
 import os
 import re
 import shutil
@@ -9,6 +9,8 @@ from urllib.parse import urljoin, urlsplit
 
 import requests
 from bs4 import BeautifulSoup
+
+module_logger = logging.getLogger(__name__)
 
 
 def download(url, path):  # noqa: WPS210
@@ -33,7 +35,10 @@ def download(url, path):  # noqa: WPS210
     all_files_path = os.path.join(path, dir_name)
 
     with open(file_path, 'w+', encoding='utf-8') as html_file:
-        os.mkdir(all_files_path)
+        try:
+            os.mkdir(all_files_path)
+        except OSError as error:
+            module_logger.error(error)
         download_img(soup, all_files_path, url)
         download_local_res(soup, all_files_path, url)
         webpage_to_str = str(soup)
@@ -64,14 +69,18 @@ def download_img(soup, all_files_path, url):  # noqa: WPS210
                 # Set decode_content value to True
                 # otherwise the downloaded image file's size will be zero.
                 response.raw.decode_content = True
+            else:
+                module_logger.error(
+                    'Site {0}, res_url {1}\nCant download resource'.format(url, image_url),  # noqa: E501
+                )
 
-            # Open a local file with wb ( write binary ) permission.
+                # Open a local file with wb ( write binary ) permission.
             with open(file_path, 'wb') as file:  # noqa: WPS110
 
                 shutil.copyfileobj(response.raw, file)
 
 
-def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231
+def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
     """Download link and scripts from web page to specific path.
 
     Args:
@@ -83,11 +92,11 @@ def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231
         source_tags = {'script': 'src', 'link': 'href'}
 
         source = resource_tag.get(source_tags.get(resource_tag.name))
+
         if source:
             if urlsplit(source).netloc:
                 if urlsplit(source).netloc != urlsplit(url).netloc:
                     continue
-
             resource_url = urljoin(url, source)
             if urlsplit(resource_url).netloc == '':
                 continue
@@ -96,9 +105,15 @@ def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231
 
             resource_tag[source_tags.get(resource_tag.name)] = file_path
 
+            response = requests.get(resource_url)
+            if response.status_code != 200:
+                module_logger.error(
+                    'Site {0}, res_url {1}\nCant download resource'.format(url, resource_url),  # noqa: E501
+                )
+
             with open(file_path, 'wb') as file:  # noqa: WPS110
 
-                file.write(requests.get(resource_url).content)
+                file.write(response.content)
 
 
 def create_html_name(url):
