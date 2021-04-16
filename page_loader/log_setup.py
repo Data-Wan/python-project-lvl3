@@ -39,16 +39,20 @@ except OSError:
 
 date_time = datetime.now()
 log_name = 'log{0}'.format(date_time.strftime('%d.%m.%Y %H:%M:%S'))  # noqa: WPS323, E501
-log_formatter = logging.Formatter(
+log_console_formatter = logging.Formatter(
     '\n%(asctime)s [%(levelname)-5.5s]  %(message)s', '%d.%m.%Y %H:%M:%S',  # noqa: WPS323, E501
 )
 
+log_file_formatter = logging.Formatter(
+    '%(asctime)s [%(levelname)-5.5s]  %(message)s\n', '%d.%m.%Y %H:%M:%S',  # noqa: WPS323, E501
+)
+
 file_handler = logging.FileHandler('{0}/{1}.log'.format(log_path, log_name))
-file_handler.setFormatter(log_formatter)
+file_handler.setFormatter(log_file_formatter)
 file_handler.setLevel(logging.DEBUG)
 
 console_handler = logging.StreamHandler()
-console_handler.setFormatter(log_formatter)
+console_handler.setFormatter(log_console_formatter)
 console_handler.setLevel(logging.ERROR)
 
 logger.addHandler(file_handler)
