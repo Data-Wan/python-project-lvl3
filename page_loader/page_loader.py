@@ -79,7 +79,6 @@ def download_img(soup, all_files_path, url):  # noqa: WPS210
 
                 file_name = create_file_name(image_url)
                 file_path = os.path.join(all_files_path, file_name)
-                imgtag['src'] = file_path
                 response = requests.get(image_url, stream=True)
                 if response.status_code == 200:
                     # Set decode_content value to True
@@ -94,6 +93,7 @@ def download_img(soup, all_files_path, url):  # noqa: WPS210
                 with open(file_path, 'wb') as file:  # noqa: WPS110
 
                     shutil.copyfileobj(response.raw, file)
+                    imgtag['src'] = file_path
 
 
 def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
@@ -123,8 +123,6 @@ def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
                 filename = create_file_name(resource_url)
                 file_path = os.path.join(all_files_path, filename)
 
-                resource_tag[source_tags.get(resource_tag.name)] = file_path
-
                 response = requests.get(resource_url)
                 if response.status_code != 200:
                     module_logger.error(
@@ -134,6 +132,7 @@ def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
                 with open(file_path, 'wb') as file:  # noqa: WPS110
 
                     file.write(response.content)
+                    resource_tag[source_tags.get(resource_tag.name)] = file_path
 
 
 def create_html_name(url):
