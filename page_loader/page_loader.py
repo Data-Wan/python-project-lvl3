@@ -44,7 +44,7 @@ def download(url, path):  # noqa: WPS210
     except OSError as error:
         module_logger.error(error)
 
-    webpage_to_str = soup.prettify()
+    webpage_to_str = str(soup)
 
     with open(file_path, 'w', encoding='utf-8') as html_file:
 
@@ -52,7 +52,7 @@ def download(url, path):  # noqa: WPS210
 
     download_img(soup, all_files_path, url)
     download_local_res(soup, all_files_path, url)
-    webpage_to_str = soup.prettify()
+    webpage_to_str = str(soup)
     with open(file_path, 'w', encoding='utf-8') as html_file1:
         html_file1.write(webpage_to_str)
 
