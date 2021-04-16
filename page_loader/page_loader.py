@@ -56,7 +56,7 @@ def download(url, path):  # noqa: WPS210
     with open(file_path, 'w', encoding='utf-8') as html_file1:
         html_file1.write(webpage_to_str)
 
-    return file_name
+    return file_path
 
 
 def download_img(soup, all_files_path, url):  # noqa: WPS210

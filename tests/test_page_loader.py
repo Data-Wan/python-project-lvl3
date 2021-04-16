@@ -25,7 +25,7 @@ def test_output(url, right_name):
     logging.info('!!!START!!!')
     with tempfile.TemporaryDirectory() as tempdir:
         name = download(url, tempdir)
-        assert name == right_name
+        assert name == os.path.join(tempdir, right_name)
         # Check if image path changed to local. (must be true)
         with open(os.path.join(tempdir, name), 'r') as file:
             soup = BeautifulSoup(file.read(), 'html.parser')
