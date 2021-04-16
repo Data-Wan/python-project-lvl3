@@ -30,7 +30,7 @@ def test_output(url, right_name):
         with open(os.path.join(tempdir, name), 'r') as file:
             soup = BeautifulSoup(file.read(), 'html.parser')
             for imgtag in soup.findAll('img'):
-                assert imgtag.get('src').startswith(tempdir)
+                assert imgtag.get('src').startswith(right_name[:-5])
 
     logging.info('!!!FINISHED!!!')
 

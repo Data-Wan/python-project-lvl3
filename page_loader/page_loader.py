@@ -90,10 +90,12 @@ def download_img(soup, all_files_path, url):  # noqa: WPS210
                     )
 
                     # Open a local file with wb ( write binary ) permission.
-                with open(file_path, 'wb') as file:  # noqa: WPS110
+                with open(file_path, 'wb') as file:
 
                     shutil.copyfileobj(response.raw, file)
-                    imgtag['src'] = file_path
+                    parent_dir_and_file = file_path.split('/')[-2:]
+                    relative_path = os.path.join(*parent_dir_and_file)
+                    imgtag['src'] = relative_path
 
 
 def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
@@ -129,10 +131,12 @@ def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
                         'Site {0}, res_url {1}\nCant download resource'.format(url, resource_url),  # noqa: E501
                     )
 
-                with open(file_path, 'wb') as file:  # noqa: WPS110
+                with open(file_path, 'wb') as file:
 
                     file.write(response.content)
-                    resource_tag[source_tags.get(resource_tag.name)] = file_path
+                    parent_dir_and_file = file_path.split('/')[-2:]
+                    relative_path = os.path.join(*parent_dir_and_file)
+                    resource_tag[source_tags.get(resource_tag.name)] = relative_path  # noqa: E501
 
 
 def create_html_name(url):
