@@ -12,5 +12,5 @@ def take_args():
     """
     parser = argparse.ArgumentParser()
     parser.add_argument('url', type=str, help='url to download')
-    parser.add_argument('--path', '-p', default='./', help='path to save file (default: current)')  # noqa: E501
+    parser.add_argument('--output', '-o', default='./', help='path to save file (default: current)')  # noqa: E501
     return parser.parse_args()
