@@ -162,9 +162,10 @@ def create_file_name(url):
     Returns:
         Name for image file.
     """
-    file_name = re.sub(r'[^\d.A-Za-z]|\.(?=[^/]+/)', '-', url)
+    file_name = delete_scheme(url)
+    file_name = re.sub(r'[^\d.A-Za-z]|\.(?=[^/]+/)', '-', file_name)
     if len(file_name) > 40:
-        file_name = file_name[-30:]
+        file_name = file_name[-247:]
     return file_name
 
 
