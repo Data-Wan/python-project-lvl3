@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 
 """Module with main function."""
-import logging
 import os
 import re
 import shutil
@@ -10,7 +9,9 @@ from urllib.parse import urljoin, urlsplit
 import requests
 from bs4 import BeautifulSoup
 
-module_logger = logging.getLogger(__name__)
+from page_loader.log_setup import logger
+
+module_logger = logger
 
 
 def download(url, path):  # noqa: WPS210

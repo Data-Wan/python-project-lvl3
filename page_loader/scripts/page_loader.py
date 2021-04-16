@@ -2,6 +2,7 @@
 
 """Module with UI."""
 import logging
+import sys
 
 from page_loader import log_setup, page_loader  # noqa: F401
 from page_loader.cli import take_args
@@ -16,6 +17,11 @@ def main():
     module_logger.info('start downloading webpage')
     print(page_loader.download(args.url, args.path))
     module_logger.info('finished downloading')
+    error_counter = log_setup.logger.error.called
+    if error_counter:
+        print('{0} errors happened during download, check logs for more information'.format(error_counter))  # noqa: E501
+        sys.exit(1)
+    sys.exit(0)
 
 
 if __name__ == '__main__':
