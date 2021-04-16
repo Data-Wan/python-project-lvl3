@@ -25,11 +25,15 @@ def download(url, path):  # noqa: WPS210
     Returns:
         Path to html file: str
 
+    Raises:
+        Exception: if response is not 200
     """
     file_name = create_html_name(url)
     file_path = os.path.join(path, file_name)
 
     response = requests.get(url)
+    if response.status_code != 200:
+        raise Exception
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
