@@ -34,16 +34,22 @@ def download(url, path):  # noqa: WPS210
 
     dir_name = '{0}_files'.format(file_name[:-5])
     all_files_path = os.path.join(path, dir_name)
+    try:
+        os.mkdir(all_files_path)
+    except OSError as error:
+        module_logger.error(error)
 
-    with open(file_path, 'w+', encoding='utf-8') as html_file:
-        try:
-            os.mkdir(all_files_path)
-        except OSError as error:
-            module_logger.error(error)
-        download_img(soup, all_files_path, url)
-        download_local_res(soup, all_files_path, url)
-        webpage_to_str = str(soup)
+    webpage_to_str = str(soup)
+
+    with open(file_path, 'w', encoding='utf-8') as html_file:
+
         html_file.write(webpage_to_str)
+
+    download_img(soup, all_files_path, url)
+    download_local_res(soup, all_files_path, url)
+    webpage_to_str = str(soup)
+    with open(file_path, 'w', encoding='utf-8') as html_file1:
+        html_file1.write(webpage_to_str)
 
     return file_name
 
