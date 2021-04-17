@@ -122,7 +122,7 @@ def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
                     if urlsplit(source).netloc != urlsplit(url).netloc:
                         continue  # noqa: WPS220
                 resource_url = urljoin(url, source)
-                if urlsplit(resource_url).netloc == '':
+                if not urlsplit(resource_url).netloc:
                     continue
                 filename = create_file_name(resource_url)
                 file_path = os.path.join(all_files_path, filename)
@@ -168,7 +168,7 @@ def create_file_name(url):
     file_name = re.sub(r'[^\d.A-Za-z]|\.(?=[^/]+/)', '-', file_name)
     if len(file_name) > 40:
         file_name = file_name[-247:]
-    if os.path.splitext(file_name)[-1] == '':
+    if not os.path.splitext(file_name)[-1]:
         return '{0}.html'.format(file_name)
     return file_name
 
