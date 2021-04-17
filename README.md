@@ -7,8 +7,13 @@
 
 ### Asciinema list
 [Basic page-loader demonstration](https://asciinema.org/a/DmuiWtaNS2iDkLoupRK6avzHL)
+
 [Page-loader with image demonstration](https://asciinema.org/a/jdlQrRUxwLWsjyobLr6bah8GT)
+
 [Page-loader with image, link and script demonstration](https://asciinema.org/a/9qYCMwbbmCieJuUjs0tqoFPCV)
+
 [Pytest with fancy logging](https://asciinema.org/a/98KihSf41JkKXo9JPqI30CIPP)
+
 [Page-loader with some errors on site](https://asciinema.org/a/eLZ7wvG2hTV3xRehzLGcohcBz)
+
 [Page-loader with progress bar](https://asciinema.org/a/UrmRsyAQTS6Qzh7kvchdTAYew)
