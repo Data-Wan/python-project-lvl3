@@ -24,4 +24,7 @@ package-install:
 package-uninstall:
 	pipx uninstall hexlet-code
 
-.PHONY: install test lint selfcheck check build help
+formatted:
+	black . --skip-string-normalization
+
+.PHONY: install test lint selfcheck check build help formatted
