@@ -23,7 +23,9 @@ def main():
     error_counter = log_setup.logger.error.called
     if error_counter:
         print(
-            '{0} errors happened during download, check logs for more information'.format(error_counter),  # noqa: E501
+            '{0} errors happened during download, check logs for more information'.format(  # noqa: E501
+                error_counter,
+            ),
         )
         sys.exit(1)
     sys.exit(0)

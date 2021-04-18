@@ -88,7 +88,9 @@ def download_img(soup, all_files_path, url):  # noqa: WPS210
                     response.raw.decode_content = True
                 else:
                     module_logger.error(
-                        'Site {0}, res_url {1}\nCant download resource'.format(url, image_url),  # noqa: E501
+                        'Site {0}, res_url {1}\nCant download resource'.format(
+                            url, image_url,
+                        ),
                     )
 
                     # Open a local file with wb ( write binary ) permission.
@@ -130,7 +132,9 @@ def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
                 response = requests.get(resource_url)
                 if response.status_code != 200:
                     module_logger.error(
-                        'Site {0}, res_url {1}\nCant download resource'.format(url, resource_url),  # noqa: E501
+                        'Site {0}, res_url {1}\nCant download resource'.format(
+                            url, resource_url,
+                        ),
                     )
 
                 with open(file_path, 'wb') as file:
@@ -138,7 +142,9 @@ def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
                     file.write(response.content)
                     parent_dir_and_file = file_path.split('/')[-2:]
                     relative_path = os.path.join(*parent_dir_and_file)
-                    resource_tag[source_tags.get(resource_tag.name)] = relative_path  # noqa: E501
+                    resource_tag[
+                        source_tags.get(resource_tag.name)
+                    ] = relative_path
 
 
 def create_html_name(url):
