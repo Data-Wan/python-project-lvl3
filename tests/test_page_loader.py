@@ -14,12 +14,13 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger(__name__)
 
 
-@pytest.mark.parametrize("url, right_name",
-
-                         [
-                             ('https://ru.hexlet.io/courses', 'ru-hexlet-io-courses.html'),
-                             ('https://en.wikipedia.org/wiki/Lilith', 'en-wikipedia-org-wiki-Lilith.html'),
-                         ])
+@pytest.mark.parametrize(
+    "url, right_name",
+    [
+        ('https://ru.hexlet.io/courses', 'ru-hexlet-io-courses.html'),
+        ('https://en.wikipedia.org/wiki/Lilith', 'en-wikipedia-org-wiki-Lilith.html'),
+    ],
+)
 def test_output(url, right_name):
     logging.info('!!!START!!!')
     with tempfile.TemporaryDirectory() as tempdir:
@@ -34,10 +35,12 @@ def test_output(url, right_name):
     logging.info('!!!FINISHED!!!')
 
 
-@pytest.mark.parametrize("url",
-
-                         ['https://site.com/404',
-                          ])
+@pytest.mark.parametrize(
+    "url",
+    [
+        'https://site.com/404',
+    ],
+)
 def test_response_with_error(url):
     with tempfile.TemporaryDirectory() as tmpdirname:
         with pytest.raises(Exception):

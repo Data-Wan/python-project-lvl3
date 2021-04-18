@@ -89,7 +89,8 @@ def download_img(soup, all_files_path, url):  # noqa: WPS210
                 else:
                     module_logger.error(
                         'Site {0}, res_url {1}\nCant download resource'.format(
-                            url, image_url,
+                            url,
+                            image_url,
                         ),
                     )
 
@@ -133,7 +134,8 @@ def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
                 if response.status_code != 200:
                     module_logger.error(
                         'Site {0}, res_url {1}\nCant download resource'.format(
-                            url, resource_url,
+                            url,
+                            resource_url,
                         ),
                     )
 
@@ -142,9 +144,7 @@ def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
                     file.write(response.content)
                     parent_dir_and_file = file_path.split('/')[-2:]
                     relative_path = os.path.join(*parent_dir_and_file)
-                    resource_tag[
-                        source_tags.get(resource_tag.name)
-                    ] = relative_path
+                    resource_tag[source_tags.get(resource_tag.name)] = relative_path
 
 
 def create_html_name(url):
