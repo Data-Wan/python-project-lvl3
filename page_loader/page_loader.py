@@ -3,14 +3,14 @@
 """Module with main function."""
 import os
 import re
-import shutil
-from urllib.parse import urljoin, urlsplit
 
 import requests
 from bs4 import BeautifulSoup
-from progress.bar import Bar
 
+from page_loader.fs_modul import write_html, create_dir
 from page_loader.log_setup import logger
+from page_loader.name_generator import delete_scheme
+from page_loader.resource_loader import download_img, download_local_res
 
 module_logger = logger
 
@@ -39,112 +39,16 @@ def download(url, path):  # noqa: WPS210
 
     dir_name = '{0}_files'.format(file_name[:-5])
     all_files_path = os.path.join(path, dir_name)
-    try:
-        os.mkdir(all_files_path)
-    except OSError as error:
-        module_logger.error(error)
+    create_dir(all_files_path)
 
-    webpage_to_str = soup.prettify(formatter='html5')
-
-    with open(file_path, 'w', encoding='utf-8') as html_file:
-
-        html_file.write(webpage_to_str)
+    write_html(file_path, soup)
 
     download_img(soup, all_files_path, url)
     download_local_res(soup, all_files_path, url)
 
-    webpage_to_str = soup.prettify(formatter='html5')
-
-    with open(file_path, 'w', encoding='utf-8') as html_file1:
-        html_file1.write(webpage_to_str)
+    write_html(file_path, soup)
 
     return file_path
-
-
-def download_img(soup, all_files_path, url):  # noqa: WPS210
-    """Download image from web page to specific path.
-
-    Args:
-        soup: str
-        all_files_path: str
-        url: str
-
-    """
-    images = soup.findAll('img')
-    bar_length = len(images) if images else 1
-    with Bar('Downloading images', max=bar_length) as bar1:
-        for imgtag in images:
-            bar1.next()  # noqa: B305
-            source = imgtag.get('src')
-            if source:
-                image_url = urljoin(url, source)
-
-                file_name = create_file_name(image_url)
-                file_path = os.path.join(all_files_path, file_name)
-                response = requests.get(image_url, stream=True)
-                if response.status_code == 200:
-                    # Set decode_content value to True
-                    # otherwise the downloaded image file's size will be zero.
-                    response.raw.decode_content = True
-                else:
-                    module_logger.error(
-                        'Site {0}, res_url {1}\nCant download resource'.format(
-                            url,
-                            image_url,
-                        ),
-                    )
-
-                    # Open a local file with wb ( write binary ) permission.
-                with open(file_path, 'wb') as file:
-
-                    shutil.copyfileobj(response.raw, file)
-                    parent_dir_and_file = file_path.split('/')[-2:]
-                    relative_path = os.path.join(*parent_dir_and_file)
-                    imgtag['src'] = relative_path
-
-
-def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
-    """Download link and scripts from web page to specific path.
-
-    Args:
-        soup: str
-        all_files_path: str
-        url: str
-    """
-    resources = soup.findAll({'script': True, 'link': True})
-    bar_length = len(resources) if resources else 1
-    with Bar('Downloading other resources', max=bar_length) as bar1:
-        for resource_tag in resources:
-            bar1.next()  # noqa: B305
-            source_tags = {'script': 'src', 'link': 'href'}
-
-            source = resource_tag.get(source_tags.get(resource_tag.name))
-
-            if source:
-                if urlsplit(source).netloc:
-                    if urlsplit(source).netloc != urlsplit(url).netloc:
-                        continue  # noqa: WPS220
-                resource_url = urljoin(url, source)
-                if not urlsplit(resource_url).netloc:
-                    continue
-                filename = create_file_name(resource_url)
-                file_path = os.path.join(all_files_path, filename)
-
-                response = requests.get(resource_url)
-                if response.status_code != 200:
-                    module_logger.error(
-                        'Site {0}, res_url {1}\nCant download resource'.format(
-                            url,
-                            resource_url,
-                        ),
-                    )
-
-                with open(file_path, 'wb') as file:
-
-                    file.write(response.content)
-                    parent_dir_and_file = file_path.split('/')[-2:]
-                    relative_path = os.path.join(*parent_dir_and_file)
-                    resource_tag[source_tags.get(resource_tag.name)] = relative_path
 
 
 def create_html_name(url):
@@ -159,35 +63,3 @@ def create_html_name(url):
     file_name = delete_scheme(url)
     file_name = re.sub(r'\W', '-', file_name)
     return '{0}.html'.format(file_name)
-
-
-def create_file_name(url):
-    """Generate name for resource file, base on url.
-
-    Args:
-        url: str
-
-    Returns:
-        Name for image file.
-    """
-    file_name = delete_scheme(url)
-    file_name = re.sub(r'[^\d.A-Za-z]|\.(?=[^/]+/)', '-', file_name)
-    if len(file_name) > 40:
-        file_name = file_name[-247:]
-    if not os.path.splitext(file_name)[-1]:
-        return '{0}.html'.format(file_name)
-    return file_name
-
-
-def delete_scheme(url):
-    """Delete a scheme of url.
-
-    Args:
-        url: str
-
-    Returns:
-        url without scheme: str
-    """
-    if url.startswith('https://'):
-        return url.replace('https://', '')
-    return url.replace('http://', '')
