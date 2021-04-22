@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 from page_loader.fs_modul import create_dir, write_html
 from page_loader.log_setup import logger
 from page_loader.name_generators import delete_scheme
-from page_loader.resource_loader import download_img, download_local_res
+from page_loader.resource_loader import download_local_res
 
 module_logger = logger
 
@@ -43,7 +43,7 @@ def download(url, path):  # noqa: WPS210
 
     write_html(file_path, soup)
 
-    download_img(soup, all_files_path, url)
+    # download_img(soup, all_files_path, url)
     download_local_res(soup, all_files_path, url)
 
     write_html(file_path, soup)
