@@ -1,3 +1,8 @@
+# -*- coding:utf-8 -*-
+
+
+"""Module with generators for naming."""
+
 import os
 import re
 
@@ -32,3 +37,31 @@ def delete_scheme(url):
     if url.startswith('https://'):
         return url.replace('https://', '')
     return url.replace('http://', '')
+
+
+def create_relative_path(file_path):
+    """Take parent directory and filename and return them.
+
+    Args:
+        file_path: str
+
+    Returns:
+        relative_path: str
+    """
+    parent_dir_and_file = file_path.split('/')[-2:]
+    return os.path.join(*parent_dir_and_file)
+
+
+def generate_file_path(all_files_path, resource_url):
+    """Generate a path of resource file.
+
+    Args:
+        all_files_path: str
+        resource_url: str
+
+    Returns:
+        full_path_to_file: str
+
+    """
+    filename = create_file_name(resource_url)
+    return os.path.join(all_files_path, filename)

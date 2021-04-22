@@ -7,9 +7,9 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from page_loader.fs_modul import write_html, create_dir
+from page_loader.fs_modul import create_dir, write_html
 from page_loader.log_setup import logger
-from page_loader.name_generator import delete_scheme
+from page_loader.name_generators import delete_scheme
 from page_loader.resource_loader import download_img, download_local_res
 
 module_logger = logger
