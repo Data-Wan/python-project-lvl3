@@ -27,7 +27,5 @@ package-uninstall:
 black:
 	black . --skip-string-normalization
 
-test-coverage:
-	PYTHONPATH=. poetry run pytest --cov=page_loader tests/ --cov-report xml
 
 .PHONY: install test lint selfcheck check build help formatted
