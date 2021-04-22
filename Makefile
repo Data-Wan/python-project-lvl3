@@ -28,6 +28,6 @@ black:
 	black . --skip-string-normalization
 
 test-coverage:
-	PYTHONPATH=. poetry run pytest -v page_loader tests --cov=page_loader --cov-report xml
+	PYTHONPATH=. poetry run pytest --cov=page_loader tests/ --cov-report xml
 
 .PHONY: install test lint selfcheck check build help formatted
