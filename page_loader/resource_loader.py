@@ -6,7 +6,7 @@
 from urllib.parse import urljoin, urlsplit
 
 import requests
-from progress.bar import Bar
+from progress.spinner import Spinner
 
 from page_loader.fs_modul import write_resource
 from page_loader.log_setup import logger
@@ -78,9 +78,9 @@ def download_source_tag(  # noqa: WPS231, WPS210, E501
         resources: list
         source_tag: str
     """
-    bar1 = Bar('Downloading other resources', suffix='%(percent)d%%')
+    spin = Spinner('Downloading resources')
     for resource_tag in resources:
-        bar1.next()  # noqa: B305
+        spin.next()  # noqa: B305
         source = resource_tag.get(source_tag)
         if (  # noqa: WPS337
             resource_tag.name != 'img'
@@ -106,7 +106,7 @@ def download_source_tag(  # noqa: WPS231, WPS210, E501
             response.raw.decode_content = True
         write_resource(file_path, resource_tag, source_tag, response)
 
-    bar1.finish()
+    spin.finish()
 
 
 def get_netloc(url):
