@@ -13,6 +13,9 @@ def take_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('url', type=str, help='url to download')
     parser.add_argument(
-        '--output', '-o', default='./', help='path to save file (default: current)',
+        '--output',
+        '-o',
+        default='./',
+        help='path to save file (default: current)',
     )
     return parser.parse_args()
