@@ -19,8 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install flake8 pytest pytest-cov
-          pip install poetry
+          pip install poetry requests-mock pytest pytest-cov
           make install
       - name: Run linter
         run: |
@@ -30,5 +29,5 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: d17bd5b74c107ab587d9ef26a960f6e6d81c2ef4f371785ece4d9a00297f316f
         with:
-          coverageCommand: PYTHONPATH=. pytest -v page_loader tests --cov=page_loader --cov-report xml
+          coverageCommand: pytest -v page_loader tests --cov=page_loader --cov-report xml
           debug: true
