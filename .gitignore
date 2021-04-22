@@ -6,3 +6,5 @@ dist/
 .idea/
 pytest.log
 logs/
+.coverage
+coverage.xml
