@@ -30,5 +30,5 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: d17bd5b74c107ab587d9ef26a960f6e6d81c2ef4f371785ece4d9a00297f316f
         with:
-          coverageCommand: pytest -v page_loader tests --cov=page_loader --cov-report xml
+          coverageCommand: PYTHONPATH=. pytest -v page_loader tests --cov=page_loader --cov-report xml
           debug: true
