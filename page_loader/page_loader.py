@@ -32,6 +32,8 @@ def download(url, path):  # noqa: WPS210
     file_path = os.path.join(path, file_name)
 
     response = requests.get(url)
+    response.raise_for_status()
+
     if response.status_code != 200:
         module_logger.error('Error with url {0}'.format(url))
         raise Exception
