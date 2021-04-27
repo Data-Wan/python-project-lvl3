@@ -65,3 +65,17 @@ def create_files_dir_name(all_files_path, resource_url):
     """
     filename = create_file_name(resource_url)
     return os.path.join(all_files_path, filename)
+
+
+def create_html_name(url):
+    """Generate name for html file, base on url.
+
+    Args:
+        url: str
+
+    Returns:
+        Name for html file.
+    """
+    file_name = delete_scheme(url)
+    file_name = re.sub(r'\W', '-', file_name)
+    return '{0}.html'.format(file_name)

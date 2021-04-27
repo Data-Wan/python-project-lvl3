@@ -2,7 +2,6 @@
 
 """Module with main function."""
 import os
-import re
 
 import requests
 from bs4 import BeautifulSoup
@@ -10,7 +9,7 @@ from bs4 import BeautifulSoup
 from page_loader.fs_modul import create_dir, write_html
 from page_loader.log_setup import logger
 from page_loader.resource_loader import download_local_res
-from page_loader.url import delete_scheme
+from page_loader.url import create_html_name
 
 module_logger = logger
 
@@ -32,11 +31,10 @@ def download(url, path):  # noqa: WPS210
     file_path = os.path.join(path, file_name)
 
     response = requests.get(url)
-    response.raise_for_status()
 
     if response.status_code != 200:
         module_logger.error('Error with url {0}'.format(url))
-        raise Exception
+        response.raise_for_status()
 
     soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -52,17 +50,3 @@ def download(url, path):  # noqa: WPS210
     write_html(file_path, soup)
 
     return file_path
-
-
-def create_html_name(url):
-    """Generate name for html file, base on url.
-
-    Args:
-        url: str
-
-    Returns:
-        Name for html file.
-    """
-    file_name = delete_scheme(url)
-    file_name = re.sub(r'\W', '-', file_name)
-    return '{0}.html'.format(file_name)
