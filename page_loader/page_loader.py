@@ -6,10 +6,10 @@ import os
 import requests
 from bs4 import BeautifulSoup
 
-from page_loader.fs_modul import create_dir, write_html
 from page_loader.log_setup import logger
+from page_loader.name_generator import create_html_name
 from page_loader.resource_loader import download_local_res
-from page_loader.url import create_html_name
+from page_loader.storage import create_dir, write_html
 
 module_logger = logger
 
@@ -23,9 +23,6 @@ def download(url, path):  # noqa: WPS210
 
     Returns:
         Path to html file: str
-
-    Raises:
-        Exception: if response is not 200
     """
     file_name = create_html_name(url)
     file_path = os.path.join(path, file_name)

@@ -8,9 +8,9 @@ from urllib.parse import urljoin, urlsplit
 import requests
 from progress.spinner import Spinner
 
-from page_loader.fs_modul import write_resource
 from page_loader.log_setup import logger
-from page_loader.url import create_files_dir_name
+from page_loader.name_generator import create_files_dir_name
+from page_loader.storage import write_resource
 
 module_logger = logger
 

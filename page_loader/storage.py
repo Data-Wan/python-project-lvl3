@@ -5,7 +5,7 @@
 import os
 
 from page_loader.log_setup import logger
-from page_loader.url import create_relative_path
+from page_loader.name_generator import create_relative_path
 
 module_logger = logger
 
