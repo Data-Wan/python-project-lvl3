@@ -52,7 +52,7 @@ def create_relative_path(file_path):
     return os.path.join(*parent_dir_and_file)
 
 
-def generate_file_path(all_files_path, resource_url):
+def create_files_dir_name(all_files_path, resource_url):
     """Generate a path of resource file.
 
     Args:

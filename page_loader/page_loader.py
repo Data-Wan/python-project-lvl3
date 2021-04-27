@@ -9,8 +9,8 @@ from bs4 import BeautifulSoup
 
 from page_loader.fs_modul import create_dir, write_html
 from page_loader.log_setup import logger
-from page_loader.name_generators import delete_scheme
 from page_loader.resource_loader import download_local_res
+from page_loader.url import delete_scheme
 
 module_logger = logger
 
@@ -33,6 +33,7 @@ def download(url, path):  # noqa: WPS210
 
     response = requests.get(url)
     if response.status_code != 200:
+        module_logger.error('Error with url {0}'.format(url))
         raise Exception
 
     soup = BeautifulSoup(response.text, 'html.parser')

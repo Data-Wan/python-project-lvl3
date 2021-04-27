@@ -3,10 +3,9 @@
 """Module with fs manipulators."""
 
 import os
-import shutil
 
 from page_loader.log_setup import logger
-from page_loader.name_generators import create_relative_path
+from page_loader.url import create_relative_path
 
 module_logger = logger
 
@@ -35,20 +34,6 @@ def create_dir(all_files_path):
         module_logger.error(error)
 
 
-def write_image(file_path, imgtag, response):
-    """Write a binary image to file_path.
-
-    Args:
-        file_path: str
-        imgtag: dict
-        response: image (binary)
-    """
-    with open(file_path, 'wb') as file:
-        shutil.copyfileobj(response.raw, file)
-        relative_path = create_relative_path(file_path)
-        imgtag['src'] = relative_path
-
-
 def write_resource(file_path, resources, source_tag, response):
     """Write a resource to file_path.
 
@@ -57,8 +42,15 @@ def write_resource(file_path, resources, source_tag, response):
         resources: dict
         source_tag: str
         response: binary
+
+    Raises:
+        OSError: If file not response.
     """
-    with open(file_path, 'wb') as file:
-        file.write(response.content)
-        relative_path = create_relative_path(file_path)
-        resources[source_tag] = relative_path
+    try:
+        with open(file_path, 'wb') as file:
+            file.write(response.content)
+            relative_path = create_relative_path(file_path)
+            resources[source_tag] = relative_path
+    except OSError as error:
+        module_logger.error(error)
+        raise

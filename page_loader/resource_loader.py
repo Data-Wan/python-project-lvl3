@@ -10,45 +10,9 @@ from progress.spinner import Spinner
 
 from page_loader.fs_modul import write_resource
 from page_loader.log_setup import logger
-from page_loader.name_generators import generate_file_path
+from page_loader.url import create_files_dir_name
 
 module_logger = logger
-
-
-# def download_img(soup, all_files_path, url):  # noqa: WPS210
-#     """Download image from web page to specific path.
-#
-#     Args:
-#         soup: str
-#         all_files_path: str
-#         url: str
-#
-#     """
-#     images = soup.findAll('img')
-#     bar1 = Bar('Downloading images', suffix='%(percent)d%%')
-#     for imgtag in images:
-#         bar1.next()  # noqa: B305
-#         source = imgtag.get('src')
-#
-#         image_url = urljoin(url, source)
-#
-#         file_path = generate_file_path(all_files_path, image_url)
-#         response = requests.get(image_url, stream=True)
-#         if response.status_code == 200:
-#             # Set decode_content value to True
-#             # otherwise the downloaded image file's size will be zero.
-#             response.raw.decode_content = True
-#         else:
-#             module_logger.error(
-#                 'Site {0}, res_url {1}\nCant download resource'.format(
-#                     url,
-#                     image_url,
-#                 ),
-#             )
-#
-#         write_image(file_path, imgtag, response)
-#
-#     bar1.finish()
 
 
 def download_local_res(soup, all_files_path, url):  # noqa: WPS210, WPS231, C901
@@ -92,7 +56,7 @@ def download_source_tag(  # noqa: WPS231, WPS210, E501
         resource_url = urljoin(url, source)
         if not get_netloc(resource_url):
             continue
-        file_path = generate_file_path(all_files_path, resource_url)
+        file_path = create_files_dir_name(all_files_path, resource_url)
 
         response = requests.get(resource_url)
         if response.status_code != 200:
